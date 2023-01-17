@@ -1,18 +1,49 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <form @submit.prevent="submitForm">
+      <BaseInput type="text" v-model="userName" />
+      <BaseInput type="email" v-model="email" />
+      <BaseInput type="number" v-model="password" />
+      <BaseInput type="number" v-model="repeatPassword" />
+      <button type="submit">Submit</button>
+    </form>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import { required, minLength, email, sameAs } from "vuelidate/lib/validators";
+
+import BaseInput from "@/components/BaseInput.vue";
 
 export default {
-  name: 'HomeView',
+  name: "HomeView",
   components: {
-    HelloWorld
-  }
-}
+    BaseInput,
+  },
+  data: () => ({
+    userName: "",
+    email: "",
+    password: "",
+    repeatPassword: "",
+  }),
+  validations: {
+    formValidator: {
+      userName: {
+        required,
+        minLength: minLength(5),
+      },
+      email: { required, email },
+      password: { required, minLength },
+      repeatPassword: {
+        required,
+        sameAsPassword: sameAs("password"),
+      },
+    },
+  },
+  methods: {
+    submitForm: async () => {
+      alert("success, form submited !!");
+    },
+  },
+};
 </script>
