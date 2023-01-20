@@ -1,29 +1,14 @@
 <template>
-  <div>
-    <label>{{ label }}</label>
-    <input
-      :placeholder="placeholder"
-      :value="modelValue"
-      @input="$emit('update:modelValue', $event.target.value)"
-      v-bind="$attrs"
-    />
-  </div>
+  <input :value="data" @input="updateData($event.target.value)" />
 </template>
 
 <script>
 export default {
-  props: {
-    label: {
-      type: String,
-      default: "",
-    },
-    placeholder: {
-      type: String,
-      default: "",
-    },
-    modelValue: {
-      type: [String, Number],
-      default: null,
+  name: "BaseInput",
+  props: ["data"],
+  methods: {
+    updateData(eventBody) {
+      this.$emit("input", eventBody);
     },
   },
 };

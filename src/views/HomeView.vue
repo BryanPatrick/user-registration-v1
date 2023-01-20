@@ -1,10 +1,30 @@
 <template>
   <div>
     <form @submit.prevent="submitForm">
-      <BaseInput type="text" v-model="userName" />
-      <BaseInput type="email" v-model="email" />
-      <BaseInput type="number" v-model="password" />
-      <BaseInput type="number" v-model="repeatPassword" />
+      <BaseInput
+        type="text"
+        placeholder="User name"
+        v-model="userName"
+        :class="{ error: $v.userName.$error }"
+      />
+      <BaseInput
+        type="email"
+        v-model="email"
+        placeholder="email@email.com"
+        :class="{ error: $v.email.$error }"
+      />
+      <BaseInput
+        type="number"
+        v-model="password"
+        placeholder="******"
+        :class="{ error: $v.password.$error }"
+      />
+      <BaseInput
+        type="number"
+        v-model="repeatPassword"
+        placeholder="******"
+        :class="{ error: $v.repeatPassword.$error }"
+      />
       <button type="submit">Submit</button>
     </form>
   </div>
@@ -27,17 +47,15 @@ export default {
     repeatPassword: "",
   }),
   validations: {
-    formValidator: {
-      userName: {
-        required,
-        minLength: minLength(5),
-      },
-      email: { required, email },
-      password: { required, minLength },
-      repeatPassword: {
-        required,
-        sameAsPassword: sameAs("password"),
-      },
+    userName: {
+      required,
+      minLength: minLength(5),
+    },
+    email: { required, email },
+    password: { required, minLength },
+    repeatPassword: {
+      required,
+      sameAsPassword: sameAs("password"),
     },
   },
   methods: {
@@ -47,3 +65,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.error {
+  border: solid 1px red;
+}
+</style>
