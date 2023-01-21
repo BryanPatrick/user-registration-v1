@@ -1,37 +1,46 @@
 <template>
   <div>
-    <form @submit.prevent="submitForm">
+    <div>
       <BaseInput
         type="text"
         placeholder="User name"
-        v-model="userName"
+        :data="get_userInfo.name"
         :class="{ error: $v.userName.$error }"
+        v-model="formData.userName"
+        @input="$v.userName.$touch()"
       />
       <BaseInput
-        type="email"
-        v-model="email"
-        placeholder="email@email.com"
-        :class="{ error: $v.email.$error }"
+        type="text"
+        placeholder="Email"
+        :data="get_userInfo.email"
+        :class="{ error: $v.userEmail.$error }"
+        v-model="formData.userEmail"
+        @input="$v.userEmail.$touch()"
       />
       <BaseInput
-        type="number"
-        v-model="password"
-        placeholder="******"
-        :class="{ error: $v.password.$error }"
+        type="text"
+        placeholder="Password"
+        :data="get_userInfo.password"
+        :class="{ error: $v.userPassword.$error }"
+        v-model="formData.userPassword"
+        @input="$v.userPassword.$touch()"
       />
       <BaseInput
-        type="number"
-        v-model="repeatPassword"
-        placeholder="******"
-        :class="{ error: $v.repeatPassword.$error }"
+        type="text"
+        placeholder="Repeat password"
+        :data="get_userInfo.repeatPassword"
+        :class="{ error: $v.userRepeatPassword.$error }"
+        v-model="formData.userRepeatPassword"
+        @input="$v.userRepeatPassword.$touch()"
       />
-      <button type="submit">Submit</button>
-    </form>
+      <button type="button" @click="set_userName(formData)">Submit</button>
+    </div>
   </div>
 </template>
 
 <script>
 import { required, minLength, email, sameAs } from "vuelidate/lib/validators";
+import { mapActions, mapGetters } from "vuex";
 
 import BaseInput from "@/components/BaseInput.vue";
 
@@ -41,25 +50,28 @@ export default {
     BaseInput,
   },
   data: () => ({
-    userName: "",
-    email: "",
-    password: "",
-    repeatPassword: "",
+    formData: {
+      userName: "",
+      userEmail: "",
+      userPassword: "",
+      userRepeatPassword: "",
+    },
   }),
   validations: {
-    userName: {
-      required,
-      minLength: minLength(5),
-    },
-    email: { required, email },
-    password: { required, minLength },
-    repeatPassword: {
-      required,
-      sameAsPassword: sameAs("password"),
-    },
+    userName: { required, minLength: minLength(5) },
+    userEmail: { required, email },
+    userPassword: { required, minLength: minLength(5) },
+    userRepeatPassword: { required, sameAs: sameAs("userPassword") },
+  },
+  computed: {
+    ...mapGetters({
+      get_userInfo: "get_userInfo",
+    }),
   },
   methods: {
-    submitForm: async () => {
+    ...mapActions({ set_userName: "set_userInfo" }),
+
+    teste: () => {
       alert("success, form submited !!");
     },
   },
@@ -68,6 +80,9 @@ export default {
 
 <style scoped>
 .error {
-  border: solid 1px red;
+  border: 3px solid red;
+}
+.error-color {
+  color: red;
 }
 </style>
